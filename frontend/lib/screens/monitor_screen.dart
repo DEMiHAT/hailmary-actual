@@ -96,9 +96,9 @@ class _MonitorScreenState extends State<MonitorScreen> with SingleTickerProvider
                 children: [
                   const VitalsScreen(isEmbedded: true), // We will pass isEmbedded:true to remove its AppBar later
                   const _AdherenceTab(),
-                  const Center(child: Text('Weight Data')),
-                  const Center(child: Text('Symptoms Data')),
-                  const Center(child: Text('Breath Data')),
+                  const _WeightTab(),
+                  const _SymptomsTab(),
+                  const _BreathTab(),
                 ],
               ),
             ),
@@ -364,6 +364,282 @@ class _DayCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(child: child),
+    );
+  }
+}
+
+// ── Weight Tab Component ─────────────────────────────────
+
+class _WeightTab extends StatelessWidget {
+  const _WeightTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Body Weight Trend',
+                      style: GoogleFonts.outfit(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.safe.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text('+0.8 kg', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.safe)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('64.8', style: GoogleFonts.outfit(fontSize: 48, fontWeight: FontWeight.w800, color: AppColors.textPrimary, height: 1.0)),
+                    const SizedBox(width: 8),
+                    Padding(padding: const EdgeInsets.only(bottom: 6), child: Text('kg', style: GoogleFonts.inter(fontSize: 16, color: AppColors.textTertiary))),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text('Target: 66.0 kg (Healthy BMI Range)', style: GoogleFonts.inter(fontSize: 13, color: AppColors.textSecondary)),
+                
+                const SizedBox(height: 32),
+                
+                // Fake Bar Chart Trend
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _WeightBar(height: 40, weight: '64.0', label: 'W1'),
+                    _WeightBar(height: 42, weight: '64.1', label: 'W2'),
+                    _WeightBar(height: 46, weight: '64.3', label: 'W3'),
+                    _WeightBar(height: 60, weight: '64.8', label: 'W4', isCurrent: true),
+                    _WeightBar(height: 80, weight: '66.0', label: 'TGT', isTarget: true),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 100),
+        ],
+      ),
+    );
+  }
+}
+
+class _WeightBar extends StatelessWidget {
+  final double height;
+  final String weight;
+  final String label;
+  final bool isCurrent;
+  final bool isTarget;
+
+  const _WeightBar({required this.height, required this.weight, required this.label, this.isCurrent = false, this.isTarget = false});
+
+  @override
+  Widget build(BuildContext context) {
+    Color barColor = AppColors.divider.withOpacity(0.5);
+    if (isCurrent) barColor = AppColors.safe;
+    if (isTarget) barColor = AppColors.info.withOpacity(0.3);
+
+    return Column(
+      children: [
+        Text(weight, style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: isCurrent ? AppColors.safe : AppColors.textTertiary)),
+        const SizedBox(height: 8),
+        Container(
+          width: 36,
+          height: height,
+          decoration: BoxDecoration(
+            color: barColor,
+            borderRadius: BorderRadius.circular(6),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: GoogleFonts.inter(fontSize: 12, fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w500, color: isCurrent ? AppColors.safe : AppColors.textSecondary)),
+      ],
+    );
+  }
+}
+
+// ── Symptoms Tab Component ─────────────────────────────────
+
+class _SymptomsTab extends StatelessWidget {
+  const _SymptomsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Daily Symptoms Log',
+                  style: GoogleFonts.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text('Last updated: Today 9:00 AM', style: GoogleFonts.inter(fontSize: 13, color: AppColors.textTertiary)),
+                const SizedBox(height: 24),
+                
+                _SymptomRow(icon: Icons.thermostat_rounded, name: 'Fever', severity: 'None', color: AppColors.safe),
+                const SizedBox(height: 16),
+                _SymptomRow(icon: Icons.sick_rounded, name: 'Fatigue', severity: 'Mild', color: AppColors.warning),
+                const SizedBox(height: 16),
+                _SymptomRow(icon: Icons.monitor_heart_rounded, name: 'Chest Pain', severity: 'None', color: AppColors.safe),
+                const SizedBox(height: 16),
+                _SymptomRow(icon: Icons.bloodtype_rounded, name: 'Haemoptysis', severity: 'None', color: AppColors.safe),
+              ],
+            ),
+          ),
+          const SizedBox(height: 100),
+        ],
+      ),
+    );
+  }
+}
+
+class _SymptomRow extends StatelessWidget {
+  final IconData icon;
+  final String name;
+  final String severity;
+  final Color color;
+
+  const _SymptomRow({required this.icon, required this.name, required this.severity, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(color: color.withOpacity(0.15), shape: BoxShape.circle),
+          child: Icon(icon, size: 20, color: color),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(name, style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+        ),
+        Text(severity, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: color)),
+      ],
+    );
+  }
+}
+
+// ── Breath Tab Component ─────────────────────────────────
+
+class _BreathTab extends StatelessWidget {
+  const _BreathTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Breathlessness',
+                      style: GoogleFonts.outfit(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      'mMRC 1',
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.safe,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text('Modified Medical Research Council Dyspnea Scale', style: GoogleFonts.inter(fontSize: 11, color: AppColors.textTertiary)),
+                const SizedBox(height: 24),
+                
+                _mMRCRow(grade: 0, desc: 'I only get breathless with strenuous exercise.', isActive: false),
+                _mMRCRow(grade: 1, desc: 'I get short of breath when hurrying on the level or walking up a slight hill.', isActive: true),
+                _mMRCRow(grade: 2, desc: 'I walk slower than people of the same age on the level.', isActive: false),
+                _mMRCRow(grade: 3, desc: 'I stop for breath after walking about 100 meters.', isActive: false),
+                _mMRCRow(grade: 4, desc: 'I am too breathless to leave the house.', isActive: false),
+              ],
+            ),
+          ),
+          const SizedBox(height: 100),
+        ],
+      ),
+    );
+  }
+}
+
+class _mMRCRow extends StatelessWidget {
+  final int grade;
+  final String desc;
+  final bool isActive;
+
+  const _mMRCRow({required this.grade, required this.desc, required this.isActive});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.safe.withOpacity(0.1) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: isActive ? AppColors.safe.withOpacity(0.5) : AppColors.divider.withOpacity(0.5)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28, height: 28,
+            decoration: BoxDecoration(color: isActive ? AppColors.safe : AppColors.divider, shape: BoxShape.circle),
+            child: Center(child: Text('G$grade', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: isActive ? Colors.white : AppColors.textSecondary))),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(desc, style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: isActive ? AppColors.textPrimary : AppColors.textSecondary, fontWeight: isActive ? FontWeight.w500 : FontWeight.w400)),
+          ),
+        ],
+      ),
     );
   }
 }

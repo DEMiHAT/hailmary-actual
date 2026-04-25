@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../widgets/glass_card.dart';
-import '../widgets/hailmary_button.dart';
-import 'emergency_screen.dart';
 import 'upload_screen.dart';
 import 'vitals_screen.dart';
 import 'cough_screen.dart';
 import 'government_screen.dart';
+import 'dart:math' as math;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -44,25 +43,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     if (hour < 12) return 'Good Morning';
     if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
-  }
-
-  void _onHailMaryPressed() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => _EmergencyConfirmDialog(
-        onConfirm: () {
-          Navigator.pop(ctx);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const EmergencyScreen(),
-            ),
-          );
-        },
-        onCancel: () => Navigator.pop(ctx),
-      ),
-    );
   }
 
   @override
@@ -122,29 +102,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ],
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
 
-                // ── HailMary Button ──
+                // ── TPS Progress Ring ──
                 Center(
-                  child: HailMaryButton(
-                    onPressed: _onHailMaryPressed,
-                    size: 190,
+                  child: _TPSProgressRing(
+                    score: 85,
+                    animation: CurvedAnimation(
+                      parent: _fadeController,
+                      curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 16),
-                Center(
-                  child: Text(
-                    'This will alert emergency health services and log an emergency event.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textTertiary,
-                          fontSize: 13,
-                        ),
-                  ),
-                ),
-
-                const SizedBox(height: 44),
+                const SizedBox(height: 36),
 
                 // ── Multimodal Monitoring Dashboard ──
                 Text(
@@ -161,25 +132,25 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 // Grid
                 Row(
                   children: [
-                    Expanded(child: _MonitoringCard(icon: '🗣️', title: 'Cough Acoustics', value: '0.71', subtitle: 'Recovery Index', weight: '30%')),
+                    Expanded(child: _MonitoringCard(icon: Icons.graphic_eq_rounded, title: 'Cough Acoustics', value: '0.71', subtitle: 'Recovery Index', weight: '30%')),
                     const SizedBox(width: 14),
-                    Expanded(child: _MonitoringCard(icon: '🫁', title: 'Chest X-Ray / CV', value: 'Mild', valueColor: AppColors.warning, subtitle: 'White patch detected', weight: '')),
+                    Expanded(child: _MonitoringCard(icon: Icons.medical_information_outlined, title: 'Chest X-Ray / CV', value: 'Mild', valueColor: AppColors.warning, subtitle: 'White patch detected', weight: '')),
                   ],
                 ),
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    Expanded(child: _MonitoringCard(icon: '💊', title: 'Med. Adherence', value: '93%', subtitle: '14-day window', weight: '20%')),
+                    Expanded(child: _MonitoringCard(icon: Icons.medication_liquid_rounded, title: 'Med. Adherence', value: '93%', subtitle: '14-day window', weight: '20%')),
                     const SizedBox(width: 14),
-                    Expanded(child: _MonitoringCard(icon: '🩸', title: 'SpO₂ Monitor', value: '97%', valueColor: AppColors.safe, subtitle: 'Camera PPG · Normal', weight: '+10% override')),
+                    Expanded(child: _MonitoringCard(icon: Icons.water_drop_rounded, title: 'SpO₂ Monitor', value: '97%', valueColor: AppColors.safe, subtitle: 'Camera PPG · Normal', weight: '+10% override')),
                   ],
                 ),
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    Expanded(child: _MonitoringCard(icon: '😮‍💨', title: 'Breathlessness', value: 'mMRC 1', valueColor: AppColors.safe, subtitle: 'Mild, hurrying only', weight: '20%')),
+                    Expanded(child: _MonitoringCard(icon: Icons.air_rounded, title: 'Breathlessness', value: 'mMRC 1', valueColor: AppColors.safe, subtitle: 'Mild, hurrying only', weight: '20%')),
                     const SizedBox(width: 14),
-                    Expanded(child: _MonitoringCard(icon: '⚖️', title: 'Weight Track', value: '+0.8kg', valueColor: AppColors.textPrimary, subtitle: 'This fortnight', weight: '10%')),
+                    Expanded(child: _MonitoringCard(icon: Icons.monitor_weight_rounded, title: 'Weight Track', value: '+0.8kg', valueColor: AppColors.textPrimary, subtitle: 'This fortnight', weight: '10%')),
                   ],
                 ),
                 
@@ -421,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 // ── Monitoring Card ──────────────────────────────────────────
 
 class _MonitoringCard extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String title;
   final String value;
   final Color? valueColor;
@@ -444,7 +415,7 @@ class _MonitoringCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 20)),
+          Icon(icon, size: 24, color: AppColors.textSecondary),
           const SizedBox(height: 12),
           Text(
             title,
@@ -529,119 +500,151 @@ class _TrendBar extends StatelessWidget {
   }
 }
 
-// ── Emergency Confirmation Dialog ──────────────────────────────
+// ── TPS Progress Ring ──────────────────────────────────────────
 
-class _EmergencyConfirmDialog extends StatelessWidget {
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
+class _TPSProgressRing extends StatelessWidget {
+  final double score;
+  final Animation<double> animation;
 
-  const _EmergencyConfirmDialog({
-    required this.onConfirm,
-    required this.onCancel,
+  const _TPSProgressRing({
+    required this.score,
+    required this.animation,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
-        child: Container(
-          padding: const EdgeInsets.all(28),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.emergency.withValues(alpha: 0.15),
-                blurRadius: 40,
-                spreadRadius: 5,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: AppColors.emergencyLight,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.emergency_rounded,
-                  color: AppColors.emergency,
-                  size: 32,
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        final currentScore = score * animation.value;
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            // Outer Ring
+            SizedBox(
+              width: 220,
+              height: 220,
+              child: CustomPaint(
+                painter: _RingPainter(
+                  progress: currentScore / 100,
+                  color: AppColors.safe,
+                  backgroundColor: AppColors.divider.withOpacity(0.3),
+                  strokeWidth: 16,
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                'Trigger Emergency?',
-                style: GoogleFonts.outfit(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+            ),
+            
+            // Inner Content
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'TPS Score',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                    color: AppColors.textTertiary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'This will alert campus health services and log an emergency event.',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                  height: 1.5,
+                const SizedBox(height: 4),
+                Text(
+                  '${currentScore.toInt()}%',
+                  style: GoogleFonts.outfit(
+                    fontSize: 48,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                    height: 1.0,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 28),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: onCancel,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        side: BorderSide(color: AppColors.divider),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.safe.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'On Track',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.safe,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: onConfirm,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.emergency,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: Text(
-                        'Confirm',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
+  }
+}
+
+class _RingPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+  final Color backgroundColor;
+  final double strokeWidth;
+
+  _RingPainter({
+    required this.progress,
+    required this.color,
+    required this.backgroundColor,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2;
+
+    // Draw background ring
+    final bgPaint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+    canvas.drawCircle(center, radius, bgPaint);
+
+    // Draw progress arc
+    final progressPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    // Sweep gradient for progress to make it look premium
+    final rect = Rect.fromCircle(center: center, radius: radius);
+    final gradient = SweepGradient(
+      colors: [AppColors.info, AppColors.safe],
+      stops: const [0.0, 1.0],
+      startAngle: -math.pi / 2,
+      endAngle: 2 * math.pi - (math.pi / 2),
+    );
+    progressPaint.shader = gradient.createShader(rect);
+
+    // Give it a glow
+    final glowPaint = Paint()
+      ..color = AppColors.safe.withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth + 8
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
+
+    final startAngle = -math.pi / 2;
+    final sweepAngle = 2 * math.pi * progress;
+
+    canvas.drawArc(rect, startAngle, sweepAngle, false, glowPaint);
+    canvas.drawArc(rect, startAngle, sweepAngle, false, progressPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RingPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+           oldDelegate.color != color ||
+           oldDelegate.backgroundColor != backgroundColor ||
+           oldDelegate.strokeWidth != strokeWidth;
   }
 }
