@@ -1,0 +1,92 @@
+[
+  {
+    "intent_id": "greeting",
+    "triggers": ["hello", "hi", "hey", "good morning", "good evening", "howdy", "wassup", "greet", "salutations"],
+    "action": "REPLY_ONLY",
+    "response": "Hello! I am HailMary, your personal rule-based diagnostic assistant. How can I assist your recovery today?"
+  },
+  {
+    "intent_id": "help",
+    "triggers": ["help", "what can you do", "list commands", "i need assistance", "command list", "how does this work", "what are my options"],
+    "action": "REPLY_ONLY",
+    "response": "I can answer 300+ medical FAQs, check your Treatment Progress Score (TPS), fetch your assigned ASHA worker details, review your adherence logs, or instantly trigger emergency workflows. Just ask!"
+  },
+  {
+    "intent_id": "get_tps_score",
+    "triggers": ["what is my tps score", "show tps", "how is my progress", "am i recovering", "check progress", "treatment progress score", "how am i doing", "what's my score", "tps status", "give me my health score"],
+    "action": "GET_TPS",
+    "response": "Fetching your Treatment Progress Score (TPS)..."
+  },
+  {
+    "intent_id": "trigger_emergency",
+    "triggers": ["trigger emergency", "call for help", "i need emergency", "send ambulance", "panic", "help me now", "sos", "alert health services", "i am dying", "cannot breathe emergency", "code red"],
+    "action": "EXECUTE_EMERGENCY",
+    "response": "EMERGENCY PROTOCOL INITIATED. Your ASHA worker and local authorities have been alerted."
+  },
+  {
+    "intent_id": "get_asha_worker",
+    "triggers": ["who is my asha worker", "asha details", "who is taking care of me", "my nurse", "assigned worker", "health worker name", "contact my asha", "who do i report to", "caregiver details"],
+    "action": "GET_ASHA",
+    "response": "Fetching your assigned ASHA worker details..."
+  },
+  {
+    "intent_id": "check_adherence",
+    "triggers": ["did i miss my pills", "medication adherence", "did i take my medicine", "pill track", "medicine count", "missed doses", "medicine schedule", "did i forget a dose", "adherence status", "show pills"],
+    "action": "GET_ADHERENCE",
+    "response": "Checking your 14-day medication adherence logs..."
+  },
+  {
+    "intent_id": "faq_tuberculosis",
+    "triggers": ["what is tb", "explain tuberculosis", "tb meaning", "is tb curable", "tuberculosis facts", "what causes tb", "tell me about tuberculosis", "how bad is tb", "what happens during tb"],
+    "action": "REPLY_ONLY",
+    "response": "Tuberculosis (TB) is a serious infectious bacterial disease that mainly affects the lungs. It is fully curable with a strict 6-9 month medication regimen. If you miss doses, drug-resistant TB can develop."
+  },
+  {
+    "intent_id": "faq_medicine_missed",
+    "triggers": ["what if i miss a dose", "forgot my pill", "missed a dose", "skipped medicine", "what to do if i forget pill", "missed medication today", "forgot tb pill"],
+    "action": "REPLY_ONLY",
+    "response": "If you miss a dose, take it as soon as you remember. If it is already time for your next dose, skip the missed one. Do NOT take a double dose to make up for a missed one. We will log this in your adherence tracker."
+  },
+  {
+    "intent_id": "faq_side_effects",
+    "triggers": ["medicine side effects", "i feel dizzy", "red urine", "orange urine", "nausea from pills", "why is my stomach hurting", "side effects of tb meds", "is it normal to feel sick from pills", "feeling tired after medicine"],
+    "action": "REPLY_ONLY",
+    "response": "Common TB medication side effects include orange/red urine (due to Rifampin), mild nausea, or fatigue. However, if you experience yellow eyes/skin (jaundice), severe vomiting, or blurred vision, alert your ASHA worker immediately."
+  },
+  {
+    "intent_id": "faq_diet",
+    "triggers": ["what should i eat", "tb diet", "can i drink milk", "can i drink alcohol", "food guidelines", "best food for tb", "dietary restrictions", "should i eat more protein", "diet recommendations"],
+    "action": "REPLY_ONLY",
+    "response": "A high-protein, calorie-rich diet is critical for TB recovery. Eat lean meats, dal, eggs, and nuts. Absolutely NO ALCOHOL, as it interacts violently with your liver while on TB medications."
+  },
+  {
+    "intent_id": "faq_contagious",
+    "triggers": ["am i contagious", "can i spread tb", "can i hug my family", "should i isolate", "when am i safe to be around others", "is my family safe", "do i need a mask at home"],
+    "action": "REPLY_ONLY",
+    "response": "Pulmonary TB is highly contagious before treatment. You must wear a mask and sleep in a separate room for the first 2-3 weeks of treatment. Once your sputum tests are negative, you are no longer contagious."
+  },
+  {
+    "intent_id": "faq_cough_acoustics",
+    "triggers": ["what is cough acoustic", "how does the microphone work", "audio monitoring", "why record my cough", "cough analysis explained", "what is audio cv", "how does the app listen to my cough"],
+    "action": "REPLY_ONLY",
+    "response": "HailMary uses acoustic AI models to detect microscopic changes in your cough frequency and wetness. We compare your current cough against baseline TB audio patterns to calculate an exact Recovery Index."
+  },
+  {
+    "intent_id": "faq_xray",
+    "triggers": ["how does chest xray work", "upload xray", "radiology cv", "what happens when i upload an xray", "can AI read my lungs", "white patch detection"],
+    "action": "REPLY_ONLY",
+    "response": "You can upload a photo of your Chest X-Ray. Our Vision AI scans the image for opacities, cavitations, and white patches, dynamically verifying your lung clearing progress against your ASHA records."
+  },
+  {
+    "intent_id": "faq_mmrc",
+    "triggers": ["what is mmrc", "breathlessness scale", "why grade my breath", "what does grade 1 mean", "dyspnea scale", "how to measure breathing"],
+    "action": "REPLY_ONLY",
+    "response": "The mMRC (Modified Medical Research Council) scale grades your breathlessness from 0 (normal) to 4 (severe). It helps us track if your lung capacity is returning or if you are risking respiratory distress."
+  },
+  {
+    "intent_id": "goodbye",
+    "triggers": ["bye", "goodbye", "see ya", "exit", "quit", "close chat", "later"],
+    "action": "REPLY_ONLY",
+    "response": "Stay safe and remember to log your data! Goodbye!"
+  }
+]

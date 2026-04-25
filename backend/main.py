@@ -11,9 +11,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
+from database.database import engine, Base, SessionLocal
+from database.seeder import seed_database
+
 from routes.emergency import router as emergency_router
 from routes.ml import router as ml_router
 from routes.records import router as records_router
+from routes.dashboard import router as dashboard_router
+from routes.asha import router as asha_router
+from routes.chat import router as chat_router
 
 # ─── App Initialization ────────────────────────────────────────
 
@@ -50,6 +56,9 @@ data_dir.mkdir(exist_ok=True)
 app.include_router(emergency_router)
 app.include_router(ml_router)
 app.include_router(records_router)
+app.include_router(dashboard_router)
+app.include_router(asha_router)
+app.include_router(chat_router)
 
 
 # ─── Health Check ───────────────────────────────────────────────
@@ -70,6 +79,7 @@ async def health_check():
             "process_vitals": "POST /ml/vitals",
             "list_records": "GET /records",
             "create_record": "POST /records",
+            "dashboard_summary": "GET /dashboard/summary",
             "docs": "GET /docs",
         },
     }
@@ -81,6 +91,19 @@ async def health_check():
 async def startup():
     print("=" * 60)
     print("  [+] HailMary Health API -- Starting Up")
+    
+    # Initialize Database Tables
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("  [+] PostgreSQL Database synced successfully.")
+        
+        # Run mock data seeder
+        db = SessionLocal()
+        seed_database(db)
+        db.close()
+    except Exception as e:
+        print(f"  [!] Database connection failed: {e}")
+        
     print("  [>] Docs:    http://localhost:8000/docs")
     print("  [>] ReDoc:   http://localhost:8000/redoc")
     print("=" * 60)

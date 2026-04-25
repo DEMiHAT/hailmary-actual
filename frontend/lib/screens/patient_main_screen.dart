@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_bottom_nav.dart';
 import 'home_screen.dart';
-import 'government_screen.dart';
 import 'cough_screen.dart';
 import 'upload_screen.dart';
 import 'monitor_screen.dart';
+import 'chat_screen.dart';
 import 'profile_screen.dart';
 import 'emergency_screen.dart';
 
@@ -20,13 +20,14 @@ class PatientMainScreen extends StatefulWidget {
 
 class _PatientMainScreenState extends State<PatientMainScreen> {
   int _selectedIndex = 0;
+  Offset _fabOffset = const Offset(280, 550); // Initial position
 
   final List<Widget> _screens = const [
     HomeScreen(),
     CoughScreen(),
     UploadScreen(),
     MonitorScreen(),
-    GovernmentScreen(),
+    ChatScreen(),
     ProfileScreen(),
   ];
 
@@ -54,25 +55,39 @@ class _PatientMainScreenState extends State<PatientMainScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       extendBody: true, // Crucial for floating nav bar
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 8), // Lift it above the CustomBottomNav
-        child: SizedBox(
-          width: 56,
-          height: 56,
-          child: FloatingActionButton(
-            heroTag: 'hailmary_fab',
-            onPressed: _onHailMaryPressed,
-            backgroundColor: AppColors.emergency,
-            elevation: 8,
-            shape: const CircleBorder(),
-            child: const Icon(Icons.medical_services_rounded, color: Colors.white, size: 28),
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: _selectedIndex,
+            children: _screens,
           ),
-        ),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
+          Positioned(
+            left: _fabOffset.dx,
+            top: _fabOffset.dy,
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                setState(() {
+                  _fabOffset = Offset(
+                    _fabOffset.dx + details.delta.dx,
+                    _fabOffset.dy + details.delta.dy,
+                  );
+                });
+              },
+              child: SizedBox(
+                width: 56,
+                height: 56,
+                child: FloatingActionButton(
+                  heroTag: 'hailmary_fab',
+                  onPressed: _onHailMaryPressed,
+                  backgroundColor: AppColors.emergency,
+                  elevation: 8,
+                  shape: const CircleBorder(),
+                  child: const Icon(Icons.medical_services_rounded, color: Colors.white, size: 28),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: CustomBottomNav(
         selectedIndex: _selectedIndex,
@@ -86,7 +101,7 @@ class _PatientMainScreenState extends State<PatientMainScreen> {
           CustomNavItem(icon: Icons.graphic_eq_rounded, label: 'Cough'),
           CustomNavItem(icon: Icons.medical_information_outlined, label: 'X-Ray'),
           CustomNavItem(icon: Icons.timeline_rounded, label: 'Monitor'),
-          CustomNavItem(icon: Icons.account_balance_rounded, label: 'Gov'),
+          CustomNavItem(icon: Icons.smart_toy_rounded, label: 'Chat'),
           CustomNavItem(icon: Icons.person_rounded, label: 'Profile'),
         ],
       ),
