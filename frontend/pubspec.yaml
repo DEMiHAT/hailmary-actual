@@ -21,6 +21,8 @@ dependencies:
   permission_handler: ^11.3.0
   sensors_plus: ^5.0.1
   flutter_displaymode: ^0.6.0
+  google_maps_flutter: ^2.14.2
+  geolocator: ^14.0.2
 
 dev_dependencies:
   flutter_test:

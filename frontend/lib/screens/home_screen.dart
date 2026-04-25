@@ -10,7 +10,7 @@ import 'records_screen.dart';
 import 'profile_screen.dart';
 import 'cough_screen.dart';
 import 'government_screen.dart';
-
+import 'dots_map_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -237,6 +237,24 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         ),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _QuickActionCard(
+                        icon: Icons.pin_drop_outlined,
+                        label: 'Find DOTS\nCenters',
+                        color: const Color(0xFF00BFA5),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const DotsMapScreen()),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    const Expanded(child: SizedBox()),
                   ],
                 ),
 
