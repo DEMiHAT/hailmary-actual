@@ -46,43 +46,50 @@ class CustomBottomNav extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(items.length, (index) {
                 final isSelected = selectedIndex == index;
                 final item = items[index];
                 
-                return GestureDetector(
-                  onTap: () => onItemSelected(index),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.info.withValues(alpha: 0.15) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          item.icon,
-                          color: isSelected ? AppColors.info : AppColors.textTertiary,
-                          size: 22,
-                        ),
-                        if (isSelected) ...[
-                          const SizedBox(width: 6),
-                          Text(
-                            item.label,
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.info,
-                            ),
+                return Flexible(
+                  child: GestureDetector(
+                    onTap: () => onItemSelected(index),
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOutCubic,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.info.withValues(alpha: 0.15) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            item.icon,
+                            color: isSelected ? AppColors.info : AppColors.textTertiary,
+                            size: 20,
                           ),
-                        ]
-                      ],
+                          if (isSelected) ...[
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                item.label,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.info,
+                                ),
+                              ),
+                            ),
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 );

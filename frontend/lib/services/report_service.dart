@@ -25,6 +25,9 @@ class ReportService {
   static const _white  = PdfColors.white;
   static const _light  = PdfColor(0.961, 0.973, 0.988);
 
+  static PdfColor _withOpacity(PdfColor color, double opacity) =>
+      PdfColor(color.red, color.green, color.blue, opacity);
+
   Future<Uint8List> buildReport({
     required AnalysisResult result,
     required SymptomProfile symptoms,
@@ -168,7 +171,7 @@ class ReportService {
                 pw.Wrap(spacing: 5, runSpacing: 4, children: r.affectedZones.map((z) =>
                     pw.Container(
                       padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: pw.BoxDecoration(color: _danger * 0.1, borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: _danger * 0.3)),
+                      decoration: pw.BoxDecoration(color: _withOpacity(_danger, 0.1), borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: _withOpacity(_danger, 0.3))),
                       child: pw.Text(z, style: pw.TextStyle(font: bold, fontSize: 9, color: _danger)),
                     )).toList()),
               ])),
@@ -232,7 +235,7 @@ class ReportService {
       pw.Padding(
         padding: const pw.EdgeInsets.symmetric(horizontal: 32),
         child: pw.Container(
-          decoration: pw.BoxDecoration(color: rc * 0.08, borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: rc * 0.3)),
+          decoration: pw.BoxDecoration(color: _withOpacity(rc, 0.08), borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: _withOpacity(rc, 0.3))),
           padding: const pw.EdgeInsets.all(16),
           child: pw.Row(children: [
             pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
@@ -303,7 +306,7 @@ class ReportService {
         pw.Expanded(child: pw.Text(l, style: pw.TextStyle(font: r, fontSize: 9, color: _sub))),
         pw.Container(
           padding: const pw.EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-          decoration: pw.BoxDecoration(color: bad ? _danger*0.1 : _safe*0.1, borderRadius: pw.BorderRadius.circular(8)),
+          decoration: pw.BoxDecoration(color: bad ? _withOpacity(_danger, 0.1) : _withOpacity(_safe, 0.1), borderRadius: pw.BorderRadius.circular(8)),
           child: pw.Text(v, style: pw.TextStyle(font: b, fontSize: 9, color: bad ? _danger : _safe)),
         ),
       ]),

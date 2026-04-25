@@ -4,72 +4,72 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   // ── Core Clinical Palette ──────────────────────────────────
-  static Color background = const Color(0xFF0A0E1A);     // Deep Space Navy
-  static Color surface    = const Color(0xFF111827);     // Clinical Dark
-  static Color surfaceAlt = const Color(0xFF1A2235);     // Card Background
-  static Color cardGlass    = const Color(0x40FFFFFF);
-  static Color cardGlassBorder = const Color(0x1AFFFFFF);
+  static Color background = const Color(0xFFF5FAFD);
+  static Color surface    = const Color(0xFFFFFFFF);
+  static Color surfaceAlt = const Color(0xFFEFF6FA);
+  static Color cardGlass    = const Color(0xFFFFFFFF);
+  static Color cardGlassBorder = const Color(0xFFE0ECF3);
 
   // ── Medical Accent Palette ──────────────────────────────────
-  static Color primary       = const Color(0xFF00D4FF);  // Electric Cyan (Clinical)
-  static Color primaryDark   = const Color(0xFF0099BB);
-  static Color primaryLight  = const Color(0x2200D4FF);
+  static Color primary       = const Color(0xFF0A84B8);
+  static Color primaryDark   = const Color(0xFF075D82);
+  static Color primaryLight  = const Color(0x1A0A84B8);
 
-  static Color emergency     = const Color(0xFFFF4757);  // Alert Red
-  static Color emergencyLight = const Color(0x33FF4757);
-  static Color emergencyDark = const Color(0xFFCC1A2A);
+  static Color emergency     = const Color(0xFFE5484D);
+  static Color emergencyLight = const Color(0x1AE5484D);
+  static Color emergencyDark = const Color(0xFFB4232A);
 
-  static Color safe          = const Color(0xFF2ECC71);  // Medical Green
-  static Color safeLight     = const Color(0x332ECC71);
+  static Color safe          = const Color(0xFF19A974);
+  static Color safeLight     = const Color(0x1A19A974);
 
-  static Color info          = const Color(0xFF00D4FF);  // Cyan
-  static Color infoLight     = const Color(0x2200D4FF);
+  static Color info          = const Color(0xFF0A84B8);
+  static Color infoLight     = const Color(0x1A0A84B8);
 
-  static Color warning       = const Color(0xFFFFB340);  // Amber
-  static Color warningLight  = const Color(0x33FFB340);
+  static Color warning       = const Color(0xFFF59E0B);
+  static Color warningLight  = const Color(0x1AF59E0B);
 
 
-  static Color heatHigh      = const Color(0xFFFF4757);  // Heatmap: hot
-  static Color heatMid       = const Color(0xFFFFB340);  // Heatmap: warm
-  static Color heatLow       = const Color(0xFF00D4FF);  // Heatmap: cool
+  static Color heatHigh      = const Color(0xFFE5484D);
+  static Color heatMid       = const Color(0xFFF59E0B);
+  static Color heatLow       = const Color(0xFF0A84B8);
 
   // ── Text ────────────────────────────────────────────────────
-  static Color textPrimary   = const Color(0xFFF0F4FF);
-  static Color textSecondary = const Color(0xFF8899BB);
-  static Color textTertiary  = const Color(0xFF445577);
+  static Color textPrimary   = const Color(0xFF102A43);
+  static Color textSecondary = const Color(0xFF486581);
+  static Color textTertiary  = const Color(0xFF829AB1);
 
   // ── UI Structure ─────────────────────────────────────────────
-  static Color divider     = const Color(0xFF1E2D45);
-  static Color shimmer     = const Color(0xFF1A2235);
-  static Color scanLine    = const Color(0x0A00D4FF);
+  static Color divider     = const Color(0xFFD9E7EF);
+  static Color shimmer     = const Color(0xFFEFF6FA);
+  static Color scanLine    = const Color(0x080A84B8);
 
   // ── Gradients ───────────────────────────────────────────────
   static LinearGradient get heroGradient => const LinearGradient(
-    colors: [Color(0xFF0A0E1A), Color(0xFF0D1B33), Color(0xFF091524)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF5FAFD), Color(0xFFEAF7FB)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient get primaryGradient => const LinearGradient(
-    colors: [Color(0xFF00D4FF), Color(0xFF0066CC)],
+    colors: [Color(0xFF2DB7D6), Color(0xFF0A84B8)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient get dangerGradient => const LinearGradient(
-    colors: [Color(0xFFFF4757), Color(0xFFCC1A2A)],
+    colors: [Color(0xFFE5484D), Color(0xFFB4232A)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient get safeGradient => const LinearGradient(
-    colors: [Color(0xFF2ECC71), Color(0xFF16A349)],
+    colors: [Color(0xFF3DCA8B), Color(0xFF19A974)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static LinearGradient get cardGradient => const LinearGradient(
-    colors: [Color(0x201A2A4A), Color(0x100A1525)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF8FCFE)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -86,18 +86,17 @@ class AppColors {
 
 class AppTheme {
   static void setUpThemeColors(ThemeMode mode) {
-    // Always use dark clinical theme regardless
-    AppColors.background = const Color(0xFF0A0E1A);
-    AppColors.surface    = const Color(0xFF111827);
-    AppColors.surfaceAlt = const Color(0xFF1A2235);
-    AppColors.cardGlass  = const Color(0x40FFFFFF);
-    AppColors.cardGlassBorder = const Color(0x1AFFFFFF);
-    AppColors.textPrimary   = const Color(0xFFF0F4FF);
-    AppColors.textSecondary = const Color(0xFF8899BB);
-    AppColors.textTertiary  = const Color(0xFF445577);
-    AppColors.divider  = const Color(0xFF1E2D45);
-    AppColors.shimmer  = const Color(0xFF1A2235);
-    AppColors.scanLine = const Color(0x0A00D4FF);
+    AppColors.background = const Color(0xFFF5FAFD);
+    AppColors.surface    = const Color(0xFFFFFFFF);
+    AppColors.surfaceAlt = const Color(0xFFEFF6FA);
+    AppColors.cardGlass  = const Color(0xFFFFFFFF);
+    AppColors.cardGlassBorder = const Color(0xFFE0ECF3);
+    AppColors.textPrimary   = const Color(0xFF102A43);
+    AppColors.textSecondary = const Color(0xFF486581);
+    AppColors.textTertiary  = const Color(0xFF829AB1);
+    AppColors.divider  = const Color(0xFFD9E7EF);
+    AppColors.shimmer  = const Color(0xFFEFF6FA);
+    AppColors.scanLine = const Color(0x080A84B8);
   }
 
   static ThemeData get lightTheme => _buildTheme();
@@ -106,15 +105,15 @@ class AppTheme {
   static ThemeData _buildTheme() {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.background,
-      colorScheme: ColorScheme.dark(
+      colorScheme: ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.safe,
         error: AppColors.emergency,
         surface: AppColors.surface,
       ),
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
+      textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme).copyWith(
         displayLarge: GoogleFonts.outfit(
           fontSize: 32, fontWeight: FontWeight.w700,
           color: AppColors.textPrimary,
@@ -170,7 +169,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.background,
+          foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

@@ -17,7 +17,7 @@ class _MonitorScreenState extends State<MonitorScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    // 5 tabs based on screenshot: SpO2, Adherence, Weight, Symptoms, Breath
+    // 5 tabs based on screenshot: SpO2, Adherence, Trend, Symptoms, Doctor
     _tabController = TabController(length: 5, vsync: this, initialIndex: 1); // Select Adherence by default
   }
 
@@ -80,9 +80,9 @@ class _MonitorScreenState extends State<MonitorScreen> with SingleTickerProvider
                 tabs: [
                   _buildTab('SpO₂', 0),
                   _buildTab('Adherence', 1),
-                  _buildTab('Weight', 2),
+                  _buildTab('Trend', 2),
                   _buildTab('Symptoms', 3),
-                  _buildTab('Breath', 4),
+                  _buildTab('Doctor', 4),
                 ],
               ),
             ),
@@ -98,7 +98,7 @@ class _MonitorScreenState extends State<MonitorScreen> with SingleTickerProvider
                   const _AdherenceTab(),
                   const _WeightTab(),
                   const _SymptomsTab(),
-                  const _BreathTab(),
+                  const _DoctorLocatorTab(),
                 ],
               ),
             ),
@@ -390,7 +390,7 @@ class _WeightTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Body Weight Trend',
+                      'Weekly Health Trend',
                       style: GoogleFonts.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -551,10 +551,10 @@ class _SymptomRow extends StatelessWidget {
   }
 }
 
-// ── Breath Tab Component ─────────────────────────────────
+// ── Doctor Locator Tab Component ─────────────────────────────────
 
-class _BreathTab extends StatelessWidget {
-  const _BreathTab();
+class _DoctorLocatorTab extends StatelessWidget {
+  const _DoctorLocatorTab();
 
   @override
   Widget build(BuildContext context) {
@@ -570,35 +570,54 @@ class _BreathTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Breathlessness',
-                      style: GoogleFonts.outfit(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(color: AppColors.info.withOpacity(0.14), borderRadius: BorderRadius.circular(12)),
+                      child: Icon(Icons.local_hospital_rounded, color: AppColors.info, size: 22),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Nearest Verified Doctor',
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                     ),
-                    Text(
-                      'mMRC 1',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.safe,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                      decoration: BoxDecoration(color: AppColors.safe.withOpacity(0.12), borderRadius: BorderRadius.circular(14)),
+                      child: Row(
+                        children: [
+                          Icon(Icons.verified_rounded, size: 14, color: AppColors.safe),
+                          const SizedBox(width: 4),
+                          Text('Verified', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.safe)),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Text('Modified Medical Research Council Dyspnea Scale', style: GoogleFonts.inter(fontSize: 11, color: AppColors.textTertiary)),
-                const SizedBox(height: 24),
-                
-                _mMRCRow(grade: 0, desc: 'I only get breathless with strenuous exercise.', isActive: false),
-                _mMRCRow(grade: 1, desc: 'I get short of breath when hurrying on the level or walking up a slight hill.', isActive: true),
-                _mMRCRow(grade: 2, desc: 'I walk slower than people of the same age on the level.', isActive: false),
-                _mMRCRow(grade: 3, desc: 'I stop for breath after walking about 100 meters.', isActive: false),
-                _mMRCRow(grade: 4, desc: 'I am too breathless to leave the house.', isActive: false),
+                const SizedBox(height: 18),
+                Text(
+                  'District TB Centre, Government Chest Hospital',
+                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '2.4 km away • DOTS / TB treatment center • Government priority',
+                  style: GoogleFonts.inter(fontSize: 13, color: AppColors.textSecondary, height: 1.35),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(child: _DoctorAction(icon: Icons.call_rounded, label: 'Call', color: AppColors.safe)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _DoctorAction(icon: Icons.directions_rounded, label: 'Directions', color: AppColors.info)),
+                  ],
+                ),
               ],
             ),
           ),
@@ -609,36 +628,25 @@ class _BreathTab extends StatelessWidget {
   }
 }
 
-class _mMRCRow extends StatelessWidget {
-  final int grade;
-  final String desc;
-  final bool isActive;
+class _DoctorAction extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
 
-  const _mMRCRow({required this.grade, required this.desc, required this.isActive});
+  const _DoctorAction({required this.icon, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.safe.withOpacity(0.1) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isActive ? AppColors.safe.withOpacity(0.5) : AppColors.divider.withOpacity(0.5)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 28, height: 28,
-            decoration: BoxDecoration(color: isActive ? AppColors.safe : AppColors.divider, shape: BoxShape.circle),
-            child: Center(child: Text('G$grade', style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: isActive ? Colors.white : AppColors.textSecondary))),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(desc, style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: isActive ? AppColors.textPrimary : AppColors.textSecondary, fontWeight: isActive ? FontWeight.w500 : FontWeight.w400)),
-          ),
-        ],
+    return OutlinedButton.icon(
+      onPressed: () {},
+      icon: Icon(icon, size: 18),
+      label: Text(label),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: color,
+        side: BorderSide(color: color.withOpacity(0.35)),
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        textStyle: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
     );
   }
